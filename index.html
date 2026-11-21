@@ -1,96 +1,161 @@
 <!DOCTYPE html><html lang="id"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#064E3B"><link rel="manifest" href="manifest.json">
-<link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/icon-192.png">
-<title>NU Smart</title>
+<link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/icon-192.png"><title>NU Smart</title>
 <style>
-:root{--g:#064E3B;--g2:#10B981;--gold:#D97706;--bg:#F3F6F4;--tx:#0f1f19;--card:#fff;--mut:#5b6b64}
-@media(prefers-color-scheme:dark){:root{--bg:#0c1511;--tx:#e8f1ed;--card:#14211b;--mut:#9bb0a6}}
-*{box-sizing:border-box;margin:0}body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--tx);padding-bottom:calc(70px + env(safe-area-inset-bottom))}
-header{background:linear-gradient(160deg,var(--g),#0a7a5a);color:#fff;text-align:center;padding:calc(18px + env(safe-area-inset-top)) 16px 26px;border-radius:0 0 28px 28px}
-header img{width:76px;height:76px;border-radius:50%;background:#fff;border:3px solid var(--gold)}
-h1{font-size:26px;margin-top:6px}h1 b{color:#fbbf24}.sm{font-size:12px;letter-spacing:.2em;opacity:.85}
-.next{display:inline-block;margin-top:12px;background:rgba(255,255,255,.14);border-radius:20px;padding:8px 16px}
-.next big{font-size:30px;font-weight:700;display:block}
-main{padding:14px;max-width:640px;margin:auto}.card{background:var(--card);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
-h2{font-size:16px;border-left:4px solid var(--gold);padding-left:8px;margin-bottom:10px}
-.row{display:flex;justify-content:space-between;padding:8px 6px;border-radius:8px}.row.on{background:var(--g2);color:#fff;font-weight:700}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:center;font-size:12px}
-.grid button{background:none;border:0;color:inherit;font:inherit}.grid i{display:grid;place-items:center;width:52px;height:52px;margin:0 auto 4px;border-radius:50%;background:#d1fae5;font-size:24px;font-style:normal}
-input{width:100%;padding:12px;border-radius:12px;border:1px solid #cbd5d0;background:var(--card);color:var(--tx);margin-bottom:10px;font-size:15px}
-.item{display:flex;gap:10px;align-items:center;padding:10px 4px;border-bottom:1px solid rgba(128,128,128,.2);cursor:pointer}
-.num{width:34px;height:34px;border-radius:50%;background:var(--g);color:#fff;display:grid;place-items:center;font-size:13px;flex:none}
-.ar{font-family:'Amiri','Scheherazade New',serif;direction:rtl;text-align:right;line-height:2.2;font-size:var(--fs,28px)}
-.ay{padding:12px 0;border-bottom:1px solid rgba(128,128,128,.2)}.lat{color:var(--g2);font-size:13px;margin-top:4px}.id{font-size:14px;color:var(--mut);margin-top:4px}
-.btn{background:var(--g);color:#fff;border:0;border-radius:10px;padding:9px 14px;font-size:14px;margin:2px}.btn.o{background:var(--gold)}
-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -2px 12px rgba(0,0,0,.1)}
-nav button{flex:1;border:0;background:none;color:var(--mut);padding:9px 0;font-size:11px}nav button.on{color:var(--g2);font-weight:700}nav i{display:block;font-size:20px;font-style:normal}
-.hide{display:none}.msg{color:var(--mut);text-align:center;padding:16px;font-size:14px}iframe{width:100%;height:70vh;border:0;border-radius:12px}
-a.n{display:block;color:inherit;text-decoration:none;padding:10px 0;border-bottom:1px solid rgba(128,128,128,.2)}
-</style></head><body>
-<header><img src="icons/icon-192.png" alt="NU Smart"><h1>NU <b>Smart</b></h1><div class="sm">MWC NU PASEAN</div><div class="sm" style="letter-spacing:0">Pasean, Pamekasan</div>
-<div class="next"><small id="nn">Sholat berikutnya</small><big id="nt">--:--</big><small id="cd"></small></div><div style="font-size:13px;margin-top:8px" id="dt"></div></header>
-<main>
-<section id="p-home"><div class="card"><div class="grid">
-<button onclick="go('quran')"><i>📖</i>Al-Qur'an</button><button onclick="go('amal')"><i>🤲</i>Amaliyah</button><button onclick="go('berita')"><i>📰</i>Berita</button><button onclick="go('akun')"><i>⚙️</i>Pengaturan</button></div></div>
-<div class="card"><h2>Jadwal Sholat</h2><div id="sched"></div><div class="msg">Dihitung di HP (tanpa internet), perkiraan Pasean. Cocokkan dengan jadwal resmi setempat.</div></div></section>
-<section id="p-quran" class="hide"><input id="q" placeholder="Cari surah…" oninput="listS()"><div id="slist" class="card"></div>
-<div id="sread" class="hide"><button class="btn" onclick="closeS()">← Daftar</button><button class="btn o" onclick="fs(2)">A+</button><button class="btn o" onclick="fs(-2)">A−</button><button class="btn" id="pa" onclick="playAll()">▶ Murottal</button>
-<h2 id="st" style="margin-top:10px;border:0"></h2><div id="ayat" class="card"></div></div></section>
-<section id="p-amal" class="hide"><div class="card"><h2>Bacaan Cepat</h2>
-<div class="item" onclick="openS(36)"><span class="num">36</span>Surat Yasin</div><div class="item" onclick="openS(67)"><span class="num">67</span>Surat Al-Mulk</div><div class="item" onclick="openS(56)"><span class="num">56</span>Surat Al-Waqi'ah</div><div class="item" onclick="openS(18)"><span class="num">18</span>Surat Al-Kahfi</div></div>
-<div class="card"><h2>Ratibul Haddad</h2><div id="rat"><button class="btn" onclick="rat()">Buka flipbook (butuh internet)</button></div></div></section>
-<section id="p-berita" class="hide"><div class="card" id="news"><div class="msg">Memuat…</div></div></section>
-<section id="p-akun" class="hide"><div class="card"><h2>Tentang</h2><p style="font-size:14px">NU Smart – aplikasi MWC NU Pasean. Bisa dipasang ke layar utama dan dipakai offline.</p></div>
-<div class="card"><h2>Unduh untuk offline</h2><p style="font-size:14px;margin-bottom:8px">Simpan seluruh Al-Qur'an (teks, tanpa audio) agar terbaca tanpa internet.</p><button class="btn" onclick="dl()">Unduh 114 surah</button><div class="msg" id="dls"></div></div></section>
-</main>
-<nav><button class="on" data-t="home" onclick="go('home')"><i>🏠</i>Beranda</button><button data-t="quran" onclick="go('quran')"><i>📖</i>Al-Qur'an</button><button data-t="amal" onclick="go('amal')"><i>🤲</i>Amaliyah</button><button data-t="berita" onclick="go('berita')"><i>📰</i>Berita</button><button data-t="akun" onclick="go('akun')"><i>⚙️</i>Akun</button></nav>
+:root{--g:#064E3B;--g2:#0E9F6E;--gold:#C8921A;--bg:#F2F5F3;--tx:#0F1F19;--card:#fff;--mut:#62736B;--line:rgba(6,78,59,.09);--grad:linear-gradient(150deg,#043B2C 0%,#0B7B58 54%,#E3B52B 125%);--sh:0 4px 18px rgba(6,60,45,.08)}
+@media(prefers-color-scheme:dark){:root{--bg:#0A120F;--tx:#E8F1ED;--card:#121D18;--mut:#98ADA3;--line:rgba(255,255,255,.09);--sh:0 4px 18px rgba(0,0,0,.35)}}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}svg{display:block}
+body{font-family:-apple-system,'Segoe UI',Roboto,system-ui,sans-serif;background:var(--bg);color:var(--tx);padding-bottom:calc(76px + env(safe-area-inset-bottom));line-height:1.45}
+.hero{background:var(--grad);padding:calc(14px + env(safe-area-inset-top)) 0 0;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;inset:0;background:radial-gradient(rgba(255,255,255,.16) 1.6px,transparent 2px) 0 0/20px 20px;-webkit-mask-image:linear-gradient(#000,transparent);mask-image:linear-gradient(#000,transparent)}
+.arch{position:relative;background:var(--card);margin:38px auto 0;max-width:640px;border-radius:160px 160px 0 0;padding:28px 16px 14px;text-align:center;box-shadow:0 -10px 30px rgba(0,0,0,.12)}
+.arch img{width:150px;max-width:48%}.loc{display:flex;justify-content:center;align-items:center;gap:4px;color:var(--mut);font-size:13px;margin-top:6px}.loc svg{color:#d33}
+.nxt{display:inline-block;margin-top:10px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.big{font-size:34px;font-weight:800;letter-spacing:-.5px;color:var(--g);line-height:1.1}@media(prefers-color-scheme:dark){.big{color:#fff}}
+.cd{display:inline-block;margin-top:8px;background:#E7F5EE;color:var(--g);border-radius:20px;padding:4px 16px;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums}@media(prefers-color-scheme:dark){.cd{background:#1d3128;color:#7ee0b5}}
+.dt{font-size:13px;margin-top:10px;color:var(--mut)}
+.sheet{max-width:640px;margin:auto;background:var(--card);padding:2px 16px 18px}
+.top{position:sticky;top:0;z-index:5;background:var(--grad);color:#fff;display:flex;align-items:center;gap:10px;padding:calc(12px + env(safe-area-inset-top)) 14px 14px;border-radius:0 0 24px 24px;box-shadow:0 6px 20px rgba(6,60,45,.2)}
+.top b{flex:1;font-size:18px;font-weight:700}.top button{background:rgba(255,255,255,.2);border:0;color:#fff;border-radius:12px;width:38px;height:38px;display:grid;place-items:center}
+main{max-width:640px;margin:auto;padding:14px}.card{background:var(--card);border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:var(--sh);border:1px solid var(--line)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px 6px;text-align:center;font-size:12px;font-weight:500}
+.grid button{background:none;border:0;color:inherit;font:inherit;transition:transform .15s}.grid button:active{transform:scale(.93)}
+.grid i{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 7px;border-radius:19px;background:linear-gradient(145deg,#E6F6EE,#FBF1CC);color:#0A6B4D;border:1px solid var(--line)}
+@media(prefers-color-scheme:dark){.grid i{background:linear-gradient(145deg,#1a2e25,#2b2a16);color:#6ee7b7}}
+input,textarea,select{width:100%;padding:13px 14px;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--tx);margin-bottom:10px;font:inherit;outline:0}input:focus,textarea:focus{border-color:var(--g2)}textarea{min-height:120px}
+.sb{display:flex;align-items:center;gap:10px;background:var(--bg);border-radius:16px;padding:0 14px;margin:20px 0 4px;border:1px solid var(--line);color:var(--mut)}.sb input{border:0;margin:0;padding:14px 0;background:none}
+h2{font-size:17px;font-weight:700;margin:20px 0 12px;display:flex;justify-content:space-between;align-items:center}h2:before{content:"";width:4px;height:18px;border-radius:3px;background:linear-gradient(var(--g2),var(--gold));margin-right:9px}h2{justify-content:flex-start}h2 small{margin-left:auto;font-size:12px;color:var(--g2);font-weight:600}
+.card h2:first-child{margin-top:0}
+.ann{display:flex;align-items:center;gap:10px;background:var(--bg);border-left:4px solid var(--gold);border-radius:14px;padding:11px 12px;margin:14px 0 4px;font-size:14px}.ann b{color:var(--gold);flex:none}.mq{overflow:hidden;white-space:nowrap;flex:1}.mq span{display:inline-block;padding-left:100%;animation:mq 24s linear infinite}@keyframes mq{to{transform:translateX(-100%)}}
+.sl{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;scrollbar-width:none;margin-bottom:6px}.sl::-webkit-scrollbar{display:none}
+.bn{flex:none;width:100%;scroll-snap-align:center;min-height:150px;border-radius:20px;background:var(--grad) center/cover;color:#fff;padding:18px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:var(--sh);text-shadow:0 1px 6px rgba(0,0,0,.45)}.bn b{font-size:19px;line-height:1.25}.bn small{opacity:.95;margin-top:4px}
+.news{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line);cursor:pointer}.news:last-child{border:0}.news>div{flex:1;min-width:0}.news img,.news .ph{width:100px;height:84px;border-radius:14px;object-fit:cover;background:var(--grad);flex:none}
+.pill{display:inline-block;background:#E7F5EE;color:#0A6B4D;border-radius:8px;padding:3px 10px;font-size:11px;font-weight:700;letter-spacing:.03em}@media(prefers-color-scheme:dark){.pill{background:#1d3128;color:#7ee0b5}}
+.news b{display:block;margin-top:7px;font-size:15px;line-height:1.35;font-weight:650}.mut{color:var(--mut);font-size:12px;margin-top:5px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}.chip{flex:none;border:1px solid var(--line);border-radius:20px;padding:8px 16px;background:var(--card);color:var(--tx);font-size:13px;font-weight:500}.chip.on{background:var(--g);border-color:var(--g);color:#fff}
+.btn{background:var(--g);color:#fff;border:0;border-radius:12px;padding:10px 16px;font-size:14px;font-weight:600;margin:3px;display:inline-flex;align-items:center;gap:6px}.btn.o{background:var(--gold)}.btn.r{background:#B42318}
+.ar{font-family:'Amiri','Scheherazade New','Traditional Arabic',serif;direction:rtl;text-align:right;line-height:2.25;font-size:var(--fs,28px)}.body p{margin:9px 0;line-height:1.7}
+.item{display:flex;gap:12px;align-items:center;padding:12px 2px;border-bottom:1px solid var(--line);cursor:pointer}.item:last-child{border:0}.num{width:38px;height:38px;border-radius:12px;background:var(--grad);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700;flex:none}
+.ay{padding:14px 0;border-bottom:1px solid var(--line)}.lat{color:var(--g2);font-size:13px;margin-top:4px}.msg{color:var(--mut);text-align:center;padding:16px;font-size:14px}
+.row{display:flex;justify-content:space-between;padding:12px 14px;border-radius:14px;font-variant-numeric:tabular-nums}.row+.row{margin-top:2px}.row.on{background:var(--grad);color:#fff;font-weight:700;box-shadow:0 4px 14px rgba(6,78,59,.3)}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;padding:6px 6px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -6px 24px rgba(0,0,0,.1);z-index:9;border-radius:22px 22px 0 0}
+nav button{flex:1;border:0;background:none;color:var(--mut);padding:6px 0;font-size:11px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative}
+nav button.on{color:var(--g2);font-weight:700}nav button.on:before{content:"";position:absolute;top:-6px;width:26px;height:3px;border-radius:0 0 4px 4px;background:var(--grad)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;font-size:15px}.cal div{padding:7px 0;border-radius:12px}.cal small{display:block;font-size:10px;color:var(--mut)}.cal .td{background:var(--grad);color:#fff}.cal .td small{color:#fff}
+.dial{width:230px;height:230px;border-radius:50%;margin:14px auto;border:6px solid var(--g2);position:relative;display:grid;place-items:center;font-size:40px;box-shadow:inset 0 0 30px rgba(14,159,110,.2)}#needle{position:absolute;inset:0;display:grid;place-items:start center;font-size:44px;transition:transform .2s}
+.ts{width:190px;height:190px;border-radius:50%;border:0;background:var(--grad);color:#fff;font-size:58px;font-weight:700;display:block;margin:16px auto;box-shadow:0 10px 26px rgba(6,78,59,.38)}iframe{width:100%;height:70vh;border:0;border-radius:14px}
+</style></head><body><div id="app"></div>
+<nav id="nv"></nav>
 <script>
-// ===== PENGATURAN (ubah di sini) =====
-const BLOG='';            // contoh: 'https://namablog.blogspot.com' (kosongkan bila belum ada)
-const LAT=-7.05,LNG=113.6,TZ=7,RATIB='https://online.anyflip.com/udswu/snhj/mobile/index.html';
-// =====================================
-const $=i=>document.getElementById(i),R=Math.PI/180,pad=n=>String(n).padStart(2,'0');
-const hm=h=>{h=(h%24+24)%24;let m=Math.round(h*60);return pad(Math.floor(m/60)%24)+':'+pad(m%60)};
-function times(d){const jd=Date.UTC(d.getFullYear(),d.getMonth(),d.getDate(),12)/864e5+2440587.5-2451545;
- const g=(357.529+.98560028*jd)%360,q=(280.459+.98564736*jd)%360,L=q+1.915*Math.sin(g*R)+.02*Math.sin(2*g*R),e=23.439-4e-7*jd;
- let ra=Math.atan2(Math.cos(e*R)*Math.sin(L*R),Math.cos(L*R))/R/15;ra=(ra%24+24)%24;const dc=Math.asin(Math.sin(e*R)*Math.sin(L*R))/R,eq=q/15-ra;
- const mid=12+TZ-LNG/15-((eq+12)%24-12);
- const T=a=>{const c=(-Math.sin(a*R)-Math.sin(dc*R)*Math.sin(LAT*R))/(Math.cos(dc*R)*Math.cos(LAT*R));return Math.acos(Math.max(-1,Math.min(1,c)))/R/15};
- const asr=-Math.atan(1/(1+Math.tan(Math.abs(LAT-dc)*R)))/R-90+90; // sudut matahari saat Asr
- const aa=Math.atan(1/(1+Math.tan(Math.abs(LAT-dc)*R)))/R,ih=2/60;
- const fajr=mid-T(20)+ih,sr=mid-T(.833),ss=mid+T(.833)+ih;
- return[['Imsak',fajr-10/60],['Subuh',fajr],['Terbit',sr],['Dzuhur',mid+ih+2/60],['Ashar',mid+T(-aa)+ih],['Maghrib',ss],['Isya',mid+T(-18)+ih]]}
-let TS=[];
-function tick(){const n=new Date(),t=times(n),cur=n.getHours()+n.getMinutes()/60+n.getSeconds()/3600,pr=t.filter(x=>x[0]!=='Imsak'&&x[0]!=='Terbit');
- let nx=pr.find(x=>x[1]>cur),tm=nx?nx[1]:times(new Date(n.getTime()+864e5))[1][1]+24;if(!nx)nx=['Subuh'];
- const s=Math.max(0,Math.round((tm-cur)*3600));$('nn').textContent='Sholat berikutnya: '+nx[0];$('nt').textContent=hm(tm);
- $('cd').textContent='− '+pad(Math.floor(s/3600))+':'+pad(Math.floor(s/60)%60)+':'+pad(s%60);
- $('sched').innerHTML=t.map(x=>`<div class="row${x[0]===nx[0]?' on':''}"><span>${x[0]}</span><span>${hm(x[1])}</span></div>`).join('');
- const f=(l,o)=>new Intl.DateTimeFormat(l,o).format(n);
- $('dt').textContent=f('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' · '+f('id-u-ca-islamic-umalqura',{day:'numeric',month:'long',year:'numeric'})}
-setInterval(tick,1000);tick();
-function go(t){document.querySelectorAll('main>section').forEach(s=>s.classList.add('hide'));$('p-'+t).classList.remove('hide');
- document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));scrollTo(0,0);if(t==='quran'&&!SU.length)loadS();if(t==='berita')loadN()}
-// ===== Al-Qur'an =====
-let SU=[],au=new Audio(),playing=null,AY=[];
-async function loadS(){$('slist').innerHTML='<div class="msg">Memuat daftar surah…</div>';
- try{const r=await fetch('https://equran.id/api/v2/surat');SU=(await r.json()).data;listS()}catch(e){$('slist').innerHTML='<div class="msg">Gagal memuat. Buka sekali saat online, lalu bisa offline.<br><button class="btn" onclick="loadS()">Coba lagi</button></div>'}}
-function listS(){const q=$('q').value.toLowerCase();$('slist').innerHTML=SU.filter(s=>(s.namaLatin+s.arti+s.nomor).toLowerCase().includes(q)).map(s=>`<div class="item" onclick="openS(${s.nomor})"><span class="num">${s.nomor}</span><div style="flex:1"><b>${s.namaLatin}</b><div class="id">${s.arti} · ${s.jumlahAyat} ayat</div></div><span class="ar" style="font-size:22px;line-height:1.4">${s.nama}</span></div>`).join('')||'<div class="msg">Tidak ditemukan</div>'}
-async function openS(n){go('quran');$('slist').classList.add('hide');$('q').classList.add('hide');$('sread').classList.remove('hide');$('ayat').innerHTML='<div class="msg">Memuat…</div>';au.pause();
- try{const d=(await(await fetch('https://equran.id/api/v2/surat/'+n)).json()).data;AY=d.ayat;$('st').textContent=d.namaLatin+' – '+d.arti;
- $('ayat').innerHTML=d.ayat.map((a,i)=>`<div class="ay"><div class="ar">${a.teksArab} ﴿${a.nomorAyat}﴾</div><div class="lat">${a.teksLatin}</div><div class="id">${a.teksIndonesia}</div><button class="btn" onclick="playA(${i})">▶ Ayat ${a.nomorAyat}</button></div>`).join('')}
- catch(e){$('ayat').innerHTML='<div class="msg">Gagal memuat surah ini (belum tersimpan offline).</div>'}}
-function closeS(){au.pause();$('sread').classList.add('hide');$('slist').classList.remove('hide');$('q').classList.remove('hide')}
-function fs(d){const c=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--fs'))||28;document.documentElement.style.setProperty('--fs',Math.min(52,Math.max(18,c+d))+'px')}
-function playA(i){const u=AY[i].audio&&(AY[i].audio['05']||Object.values(AY[i].audio)[0]);if(!u)return;au.src=u;au.play();au.onended=()=>{if(playing!==null&&AY[i+1])playA(i+1)}}
-function playAll(){playing=1;playA(0)}au.onpause=()=>{};
-async function dl(){let ok=0;for(let n=1;n<=114;n++){try{await fetch('https://equran.id/api/v2/surat/'+n);ok++}catch(e){}$('dls').textContent=ok+' / 114 tersimpan'}$('dls').textContent=ok===114?'Selesai. Al-Qur\'an kini bisa dibaca offline.':ok+' / 114 tersimpan. Coba lagi saat online.'}
-// ===== Berita (Blogger) =====
-async function loadN(){const el=$('news');if(!BLOG){el.innerHTML='<div class="msg">Isi alamat blog pada baris <code>const BLOG</code> di index.html.</div>';return}
- let j;try{j=await(await fetch(BLOG+'/feeds/posts/default?alt=json&max-results=20')).json();localStorage.nuNews=JSON.stringify(j)}catch(e){j=JSON.parse(localStorage.nuNews||'null')}
- if(!j){el.innerHTML='<div class="msg">Belum bisa memuat berita.</div>';return}
- el.innerHTML=(j.feed.entry||[]).map(e=>{const l=(e.link.find(x=>x.rel==='alternate')||{}).href;return`<a class="n" href="${l}" target="_blank"><b>${e.title.$t}</b><div class="id">${new Date(e.published.$t).toLocaleDateString('id-ID')}</div></a>`}).join('')}
-function rat(){$('rat').innerHTML=`<iframe src="${RATIB}" allowfullscreen></iframe><a class="btn o" style="display:inline-block;text-decoration:none" href="${RATIB}" target="_blank">Layar penuh</a>`}
+const LAT=-7.05,LNG=113.6,TZ=7,RATIB='https://online.anyflip.com/udswu/snhj/mobile/index.html',R=Math.PI/180;
+const $=i=>document.getElementById(i),pad=n=>String(n).padStart(2,'0'),E=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const AR=/[\u0600-\u06FF]/,body=t=>'<div class="body">'+String(t||'').split('\n').map(l=>AR.test(l)?`<div class="ar">${E(l)}</div>`:l.trim()?`<p>${E(l)}</p>`:'').join('')+'</div>';
+const uid=()=>Math.random().toString(36).slice(2,9),today=()=>new Date().toISOString().slice(0,10);
+const fd=d=>d?new Date(d).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}):'';
+const P={home:'<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',quran:'<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',spark:'<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/>',clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',compass:'<circle cx="12" cy="12" r="10"/><path d="m16.2 7.8-2.1 6.3-6.3 2.1 2.1-6.3z"/>',users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',mic:'<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"/>',heart:'<path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/>',grid:'<path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/>',bank:'<path d="M3 22h18M6 18v-7M10 18v-7M14 18v-7M18 18v-7M12 2l8 5H4z"/>',news:'<path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/>',dot:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="2.5"/>',calc:'<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/>',cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',file:'<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>',user:'<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',mega:'<path d="m3 11 18-5v12L3 14z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',pin:'<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>',left:'<path d="m12 19-7-7 7-7M19 12H5"/>',plus:'<path d="M5 12h14M12 5v14"/>',edit:'<path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/>'};
+const ic=(n,z=24)=>`<svg viewBox="0 0 24 24" width="${z}" height="${z}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${P[n]}</svg>`;
+function drawNav(){$('nv').innerHTML=[['home','home','Beranda',"tab('home')"],['quran','quran',"Al-Qur'an","tab('quran')"],['berita','news','Berita',"tab('col','berita')"],['kalender','cal','Kalender',"tab('kalender')"],['akun','user','Akun',"tab('akun')"]].map(n=>`<button data-t="${n[0]}" onclick="${n[3]}">${ic(n[1],22)}${n[2]}</button>`).join('')}
+const COLS={berita:'Berita',wirid:'Wirid & Doa',tahlil:'Tahlil & Yasin',maulid:'Maulid & Qasidah',pengurus:'Struktur & Banom',banner:'Banner Beranda'};
+const DEF={ann:['Selamat datang di NU Smart – MWC NU Pasean','Admin dapat mengubah pengumuman ini di menu Akun'],
+rek:'Bank: (isi di menu Akun)\nNo. Rekening: -\na.n. MWC NU Pasean\nQRIS: tempel tautan gambar di kolom Gambar bila perlu',
+about:'NU Smart adalah aplikasi digital MWC NU Pasean, Pamekasan.',
+cols:{berita:[{id:'b1',t:'Selamat datang di NU Smart',c:'Pengumuman',d:today(),i:'',b:'Ini contoh berita. Admin bisa menambah, mengubah, dan menghapusnya dari menu Akun.'}],
+wirid:[{id:'w1',t:'Contoh Wirid & Doa',c:'Wirid',d:'',i:'',b:'Admin dapat menempel teks Arab dan terjemahan di sini. Baris berhuruf Arab otomatis tampil dengan font Arab.'}],
+tahlil:[{id:'t1',t:'Susunan Tahlil',c:'Tahlil',d:'',i:'',b:'Isi susunan tahlil yang dipakai di Pasean melalui menu Akun. Untuk Surat Yasin, gunakan menu Al-Qur\'an.'}],
+maulid:[{id:'m1',t:'Maulid Diba\' / Barzanji',c:'Maulid',d:'',i:'',b:'Teks belum diisi. Admin dapat menambahkannya.'}],
+pengurus:[{id:'p1',t:'Rais Syuriyah',c:'Syuriyah',d:'',i:'',b:'Nama: (isi)\nKontak: (isi)'},{id:'p2',t:'Ketua Tanfidziyah',c:'Tanfidziyah',d:'',i:'',b:'Nama: (isi)\nKontak: (isi)'}],
+banner:[{id:'n1',t:'Lailatul Ijtima\' MWC NU Pasean',c:'',d:'',i:'',b:'Ubah banner ini dari menu Akun'}]}};
+let D=JSON.parse(JSON.stringify(DEF)),admin=localStorage.nuAdmin==='1',H=[['home']],FS=28;
+const persist=()=>{localStorage.nuDraft=JSON.stringify(D)};
+async function init(){drawNav();try{const r=await fetch('content.json');if(r.ok)D=await r.json()}catch(e){}
+ if(admin&&localStorage.nuDraft)try{D=JSON.parse(localStorage.nuDraft)}catch(e){}render()}
+const cur=()=>H[H.length-1];
+function nav(...a){H.push(a);render()}function back(){if(H.length>1)H.pop();render()}function tab(...a){H=[a];render()}
+const news=()=>[...(D.cols.berita||[])].sort((a,b)=>(b.d||'').localeCompare(a.d||''));
+const MENU=[['quran','quran',"Al-Qur'an"],['col:wirid','spark','Wirid & Doa'],['jadwal','clock','Jadwal Shalat'],['kiblat','compass','Kiblat'],['col:tahlil','users','Tahlil & Yasin'],['col:maulid','mic','Maulid & Qasidah'],['zakat','heart','Zakat & Sedekah'],['more','grid','Lainnya']];
+const MORE=[...MENU.slice(0,7),['col:pengurus','bank','Struktur & Banom'],['col:berita','news','Berita'],['tasbih','dot','Tasbih'],['hitung','calc','Kalkulator Zakat'],['kalender','cal','Kalender Hijriah'],['ratib','file','Ratibul Haddad']];
+const mgo=k=>k.startsWith('col:')?`nav('col','${k.slice(4)}')`:`nav('${k}')`;
+const menu=l=>'<div class="grid">'+l.map(m=>`<button onclick="${mgo(m[0])}"><i>${ic(m[1],26)}</i>${m[2]}</button>`).join('')+'</div>';
+const newsRow=(x,c)=>`<div class="news" onclick="nav('item','${c}','${x.id}')"><div>${x.c?`<span class="pill">${E(x.c)}</span>`:''}<b>${E(x.t)}</b><div class="mut">${fd(x.d)}</div></div>${x.i?`<img src="${E(x.i)}" loading="lazy" alt="">`:'<div class="ph"></div>'}</div>`;
+const top=(t,extra='')=>`<div class="top"><button onclick="back()">${ic('left',20)}</button><b>${t}</b>${extra}</div>`;
+let SL=null;
+function render(){clearInterval(SL);const[v,...a]=cur(),f=V[v];$('app').innerHTML=f(...a);
+ document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===H[0][0]||(b.dataset.t==='berita'&&H[0][1]==='berita')));scrollTo(0,0);tick();
+ const s=$('sl');if(s&&s.children.length>1){let i=0;SL=setInterval(()=>{i=(i+1)%s.children.length;s.scrollTo({left:i*s.clientWidth,behavior:'smooth'})},5000)}if(v==='kiblat')QB=qibla()}
+const V={
+home(){const n=news(),cats=[...new Set(n.map(x=>x.c).filter(Boolean))];
+ return`<div class="hero"><div class="arch"><img src="logo.png" alt="NU Smart"><div class="loc">${ic('pin',14)} Pasean, Pamekasan</div><div class="nxt" id="nn"></div><div class="big" id="nt"></div><div class="cd" id="cd"></div><div class="dt" id="dt"></div></div></div>
+ <div class="sheet">${menu(MENU)}<div class="sb">${ic('search',18)}<input placeholder="Cari doa, wirid, berita" onkeydown="if(event.key==='Enter')nav('search',this.value)"></div>
+ ${(D.ann||[]).length?`<div class="ann"><b>${ic('mega',20)}</b><div class="mq"><span>${E(D.ann.join('   •   '))}</span></div></div>`:''}</div>
+ <main>${(D.cols.banner||[]).length?`<div class="sl" id="sl">${D.cols.banner.map(b=>`<div class="bn" style="${b.i?`background-image:linear-gradient(transparent,rgba(0,0,0,.6)),url('${E(b.i)}')`:''}" onclick="nav('item','banner','${b.id}')"><b>${E(b.t)}</b><small>${E((b.b||'').split('\n')[0])}</small></div>`).join('')}</div>`:''}
+ <h2>Headline <small onclick="nav('col','berita')">Lihat semua ›</small></h2><div class="card">${n.slice(0,3).map(x=>newsRow(x,'berita')).join('')||'<div class="msg">Belum ada berita</div>'}</div>
+ ${cats.length?`<h2>Topik</h2><div class="chips">${cats.map(c=>`<button class="chip" onclick="nav('col','berita','${E(c)}')">${E(c)}</button>`).join('')}</div>`:''}
+ ${n.length>3?`<h2>Rekomendasi</h2><div class="card">${n.slice(3,9).map(x=>newsRow(x,'berita')).join('')}</div>`:''}</main>`},
+more(){return top('Semua Menu')+`<main><div class="card">${menu(MORE)}</div></main>`},
+col(c,f){let L=D.cols[c]||[];if(c==='berita')L=news();const cats=c==='berita'?[...new Set(L.map(x=>x.c).filter(Boolean))]:[];if(f)L=L.filter(x=>x.c===f);
+ return top(COLS[c]+(f?' · '+E(f):''),admin?`<button onclick="nav('edit','${c}')">${ic('plus',20)}</button>`:'')+`<main>${cats.length?`<div class="chips"><button class="chip${f?'':' on'}" onclick="H.pop();nav('col','${c}')">Semua</button>${cats.map(k=>`<button class="chip${k===f?' on':''}" onclick="H.pop();nav('col','${c}','${E(k)}')">${E(k)}</button>`).join('')}</div>`:''}
+ <div class="card">${L.map(x=>newsRow(x,c)+(admin?`<div><button class="btn" onclick="nav('edit','${c}','${x.id}')">Edit</button><button class="btn r" onclick="del('${c}','${x.id}')">Hapus</button></div>`:'')).join('')||'<div class="msg">Belum ada isi.'+(admin?' Tekan ＋ untuk menambah.':'')+'</div>'}</div></main>`},
+item(c,id){const x=(D.cols[c]||[]).find(k=>k.id===id);if(!x)return top('Tidak ditemukan');
+ return top(E(COLS[c]),admin?`<button onclick="nav('edit','${c}','${id}')">${ic('edit',18)}</button>`:'')+`<main><div class="card">${x.i?`<img src="${E(x.i)}" style="width:100%;border-radius:12px;margin-bottom:10px" alt="">`:''}${x.c?`<span class="pill">${E(x.c)}</span>`:''}<h2 style="border:0;padding:0;font-size:20px;margin:8px 0">${E(x.t)}</h2><div class="mut">${fd(x.d)}</div>
+ <div style="margin:8px 0"><button class="btn o" onclick="fs(2)">A+</button><button class="btn o" onclick="fs(-2)">A−</button></div>${body(x.b)}${admin?`<hr><button class="btn" onclick="nav('edit','${c}','${id}')">Edit</button><button class="btn r" onclick="del('${c}','${id}',1)">Hapus</button>`:''}</div></main>`},
+edit(c,id){const x=(D.cols[c]||[]).find(k=>k.id===id)||{t:'',c:'',d:today(),i:'',b:''};
+ return top((id?'Edit ':'Tambah ')+COLS[c])+`<main><div class="card"><input id="f_t" placeholder="Judul / Nama" value="${E(x.t)}"><input id="f_c" placeholder="Kategori / Jabatan (opsional)" value="${E(x.c)}"><input id="f_d" type="date" value="${E(x.d)}"><input id="f_i" placeholder="Tautan gambar (opsional)" value="${E(x.i)}"><textarea id="f_b" placeholder="Isi (baris Arab otomatis berfont Arab)" style="min-height:220px">${E(x.b)}</textarea>
+ <button class="btn" onclick="saveItem('${c}','${id||''}')">Simpan</button><button class="btn r" onclick="back()">Batal</button></div></main>`},
+search(q){q=(q||'').toLowerCase();let r=[];for(const c in D.cols)D.cols[c].forEach(x=>{if(c!=='banner'&&(x.t+' '+x.b+' '+x.c).toLowerCase().includes(q))r.push(newsRow(x,c))});
+ return top('Hasil: '+E(q))+`<main><div class="card">${r.join('')||'<div class="msg">Tidak ditemukan</div>'}</div></main>`},
+jadwal(){return top('Jadwal Shalat')+`<main><div class="card" id="sched"></div><div class="msg">Dihitung di HP (tanpa internet) untuk Pasean. Cocokkan dengan jadwal resmi Kemenag setempat.</div></main>`},
+kiblat(){return top('Arah Kiblat')+`<main><div class="card" style="text-align:center"><div>Kiblat dari Pasean: <b>${qibla().toFixed(1)}°</b> dari utara</div><div class="dial"><div id="needle">🕋</div><span id="hd" style="font-size:16px;margin-top:150px;color:var(--mut)"></span></div><button class="btn" onclick="compass()">Aktifkan Kompas</button><div class="msg">Letakkan HM datar. Putar badan hingga ikon 🕋 berada di atas.</div></div></main>`.replace('HM','HP')},
+zakat(){return top('Zakat & Sedekah')+`<main><div class="card"><h2>Rekening Infaq / Koin NU</h2>${body(D.rek)}</div><div class="card"><button class="btn o" onclick="nav('hitung')">${ic('calc',18)} Kalkulator Zakat</button></div></main>`},
+hitung(){return top('Kalkulator Zakat')+`<main><div class="card"><h2>Zakat Maal</h2><input id="z1" type="number" placeholder="Total harta (Rp)" oninput="zk()"><input id="z2" type="number" placeholder="Harga emas per gram (Rp)" oninput="zk()"><div id="zr" class="msg">Nisab 85 gram emas, zakat 2,5%.</div></div>
+ <div class="card"><h2>Zakat Fitrah</h2><input id="f1" type="number" placeholder="Jumlah jiwa" oninput="zk()"><input id="f2" type="number" placeholder="Harga beras per kg (Rp)" oninput="zk()"><div id="fr" class="msg">2,5 kg beras per jiwa.</div></div></main>`},
+tasbih(){const n=+localStorage.nuTs||0;return top('Tasbih')+`<main><div class="card" style="text-align:center"><button class="ts" id="tb" onclick="ts(1)">${n}</button><button class="btn" onclick="ts(0)">Reset</button></div></main>`},
+kalender(o=0){const t=new Date(),d=new Date(t.getFullYear(),t.getMonth()+o,1),n=new Date(d.getFullYear(),d.getMonth()+1,0).getDate(),hj=x=>new Intl.DateTimeFormat('id-u-ca-islamic-umalqura',{day:'numeric'}).format(x);
+ let c='';for(let i=0;i<d.getDay();i++)c+='<div></div>';for(let i=1;i<=n;i++){const x=new Date(d.getFullYear(),d.getMonth(),i);c+=`<div class="${o===0&&i===t.getDate()?'td':''}">${i}<small>${hj(x)}</small></div>`}
+ const mid=new Date(d.getFullYear(),d.getMonth(),15);
+ return top('Kalender Hijriah')+`<main><div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><button class="btn" onclick="H.pop();nav('kalender',${o-1})">‹</button><b style="text-align:center">${d.toLocaleDateString('id-ID',{month:'long',year:'numeric'})}<div class="mut">${new Intl.DateTimeFormat('id-u-ca-islamic-umalqura',{month:'long',year:'numeric'}).format(mid)}</div></b><button class="btn" onclick="H.pop();nav('kalender',${o+1})">›</button></div><br><div class="cal"><b>Min</b><b>Sen</b><b>Sel</b><b>Rab</b><b>Kam</b><b>Jum</b><b>Sab</b>${c}</div></div></main>`},
+ratib(){return top('Ratibul Haddad')+`<main><div class="card"><iframe src="${RATIB}" allowfullscreen></iframe><a class="btn o" style="display:inline-block;text-decoration:none;margin-top:8px" href="${RATIB}" target="_blank">Layar penuh</a><div class="msg">Butuh internet.</div></div></main>`},
+quran(){return top("Al-Qur'an")+`<main><input id="q" placeholder="Cari surah…" oninput="listS()"><div id="slist" class="card"><div class="msg">Memuat…</div></div></main>`},
+surah(n){return top('<span id="st">Memuat…</span>')+`<main><div class="card"><button class="btn o" onclick="fs(2)">A+</button><button class="btn o" onclick="fs(-2)">A−</button></div><div class="card" id="ayat"><div class="msg">Memuat…</div></div></main>`},
+akun(){return top('Akun & Pengaturan')+(admin?`<main><div class="card"><h2>Dashboard Admin</h2>${Object.keys(COLS).map(c=>`<button class="btn" onclick="nav('col','${c}')">${COLS[c]} (${(D.cols[c]||[]).length})</button>`).join('')}<button class="btn o" onclick="nav('set')">Pengumuman, Rekening & PIN</button></div>
+ <div class="card"><h2>Terbitkan ke semua pengguna</h2><div class="mut">Perubahan baru tersimpan di HP ini. Unduh berkasnya, lalu unggah ke GitHub (ganti berkas content.json) agar semua pengguna melihatnya.</div><br><button class="btn o" onclick="exp()">⬇ Unduh content.json</button><label class="btn" style="display:inline-block">⬆ Impor<input type="file" accept=".json" hidden onchange="imp(this)"></label><button class="btn r" onclick="rst()">Buang perubahan lokal</button></div>
+ <div class="card"><button class="btn r" onclick="logout()">Keluar Admin</button></div></main>`:`<main><div class="card"><h2>Tentang</h2>${body(D.about)}</div><div class="card"><h2>Offline</h2><button class="btn" onclick="dl()">Unduh 114 surah</button><div class="msg" id="dls"></div></div><div class="card"><h2>Login Admin</h2><input id="pin" type="password" placeholder="PIN"><button class="btn" onclick="login()">Masuk</button></div></main>`)},
+set(){return top('Pengaturan')+`<main><div class="card"><h2>Pengumuman (satu baris per pengumuman)</h2><textarea id="s1">${E((D.ann||[]).join('\n'))}</textarea><h2>Info Rekening / Koin NU</h2><textarea id="s2">${E(D.rek)}</textarea><h2>Tentang</h2><textarea id="s3">${E(D.about)}</textarea><button class="btn" onclick="saveSet()">Simpan</button><h2>Ganti PIN</h2><input id="s4" placeholder="PIN baru"><button class="btn o" onclick="if($('s4').value){localStorage.nuPin=$('s4').value;alert('PIN diganti di HP ini')}">Ganti PIN</button></div></main>`}};
+// ---- admin ----
+function login(){if($('pin').value===(localStorage.nuPin||'admin123')){localStorage.nuAdmin='1';admin=true;if(localStorage.nuDraft)try{D=JSON.parse(localStorage.nuDraft)}catch(e){}render()}else alert('PIN salah')}
+function logout(){localStorage.nuAdmin='0';location.reload()}
+function saveItem(c,id){const o={id:id||uid(),t:$('f_t').value.trim(),c:$('f_c').value.trim(),d:$('f_d').value,i:$('f_i').value.trim(),b:$('f_b').value};if(!o.t)return alert('Judul wajib diisi');
+ const L=D.cols[c]=D.cols[c]||[],k=L.findIndex(x=>x.id===id);k>=0?L[k]=o:L.unshift(o);persist();back()}
+function del(c,id,b){if(!confirm('Hapus item ini?'))return;D.cols[c]=D.cols[c].filter(x=>x.id!==id);persist();b?back():render()}
+function saveSet(){D.ann=$('s1').value.split('\n').map(s=>s.trim()).filter(Boolean);D.rek=$('s2').value;D.about=$('s3').value;persist();back()}
+function exp(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(D,null,1)],{type:'application/json'}));a.download='content.json';a.click()}
+function imp(i){const r=new FileReader();r.onload=()=>{try{D=JSON.parse(r.result);persist();render();alert('Impor berhasil')}catch(e){alert('Berkas tidak valid')}};r.readAsText(i.files[0])}
+function rst(){if(confirm('Buang semua perubahan di HP ini?')){localStorage.removeItem('nuDraft');location.reload()}}
+function fs(d){FS=Math.min(52,Math.max(18,FS+d));document.documentElement.style.setProperty('--fs',FS+'px')}
+// ---- shalat, kiblat, hitung ----
+const hm=h=>{const m=Math.round(((h%24)+24)%24*60);return pad(Math.floor(m/60)%24)+':'+pad(m%60)};
+function times(d){const jd=Date.UTC(d.getFullYear(),d.getMonth(),d.getDate(),12)/864e5+2440587.5-2451545,g=(357.529+.98560028*jd)%360,q=(280.459+.98564736*jd)%360,L=q+1.915*Math.sin(g*R)+.02*Math.sin(2*g*R),e=23.439-4e-7*jd;
+ let ra=(Math.atan2(Math.cos(e*R)*Math.sin(L*R),Math.cos(L*R))/R/15+24)%24;const dc=Math.asin(Math.sin(e*R)*Math.sin(L*R))/R,eq=((q/15-ra+36)%24)-12,mid=12+TZ-LNG/15-eq;
+ const T=a=>Math.acos(Math.max(-1,Math.min(1,(-Math.sin(a*R)-Math.sin(dc*R)*Math.sin(LAT*R))/(Math.cos(dc*R)*Math.cos(LAT*R)))))/R/15,aa=Math.atan(1/(1+Math.tan(Math.abs(LAT-dc)*R)))/R,ih=2/60,fj=mid-T(20)+ih;
+ return[['Imsak',fj-10/60],['Subuh',fj],['Terbit',mid-T(.833)],['Dzuhur',mid+ih+2/60],['Ashar',mid+T(-aa)+ih],['Maghrib',mid+T(.833)+ih],['Isya',mid+T(-18)+ih]]}
+function tick(){const n=new Date(),t=times(n),c=n.getHours()+n.getMinutes()/60+n.getSeconds()/3600,pr=t.filter(x=>x[0]!=='Imsak'&&x[0]!=='Terbit');let nx=pr.find(x=>x[1]>c),tm;if(nx)tm=nx[1];else{nx=['Subuh'];tm=times(new Date(n.getTime()+864e5))[1][1]+24}
+ const s=Math.max(0,Math.round((tm-c)*3600));if($('nt')){$('nn').textContent='Sholat berikutnya · '+nx[0];$('nt').textContent=hm(tm)+' WIB';$('cd').textContent='− '+pad(Math.floor(s/3600))+' : '+pad(Math.floor(s/60)%60)+' : '+pad(s%60);const f=(l,o)=>new Intl.DateTimeFormat(l,o).format(n);$('dt').textContent=f('id-ID',{day:'numeric',month:'long',year:'numeric'})+' / '+f('id-u-ca-islamic-umalqura',{day:'numeric',month:'long',year:'numeric'})}
+ if($('sched'))$('sched').innerHTML=t.map(x=>`<div class="row${x[0]===nx[0]?' on':''}"><span>${x[0]}</span><span>${hm(x[1])}</span></div>`).join('')}
+setInterval(tick,1000);
+let QB=0,AB=false;function qibla(){const p=21.4225*R,l=(39.8262-LNG)*R,f=LAT*R;return(Math.atan2(Math.sin(l),Math.cos(f)*Math.tan(p)-Math.sin(f)*Math.cos(l))/R+360)%360}
+function compass(){const h=e=>{if(e.type==='deviceorientationabsolute')AB=true;else if(AB)return;const a=e.webkitCompassHeading!=null?e.webkitCompassHeading:e.alpha!=null?360-e.alpha:null;if(a==null||!$('needle'))return;$('needle').style.transform=`rotate(${QB-a}deg)`;$('hd').textContent=Math.round(a)+'°'},run=()=>{addEventListener('deviceorientationabsolute',h,true);addEventListener('deviceorientation',h,true)};
+ if(window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission)DeviceOrientationEvent.requestPermission().then(r=>r==='granted'&&run());else run()}
+const rp=n=>'Rp '+Math.round(n).toLocaleString('id-ID');
+function zk(){const h=+$('z1')?.value||0,e=+$('z2')?.value||0,j=+$('f1')?.value||0,b=+$('f2')?.value||0;if(e)$('zr').innerHTML=h>=85*e?`Nisab ${rp(85*e)}. Zakat wajib: <b>${rp(h*.025)}</b>`:`Nisab ${rp(85*e)}. Harta belum mencapai nisab.`;if(j&&b)$('fr').innerHTML=`${j*2.5} kg beras ≈ <b>${rp(j*2.5*b)}</b>`}
+function ts(a){const n=a?(+localStorage.nuTs||0)+1:0;localStorage.nuTs=n;$('tb').textContent=n;if(a&&navigator.vibrate)navigator.vibrate(15)}
+// ---- Al-Qur'an ----
+let SU=[],AY=[],au=new Audio();
+async function listS(){if(!SU.length)try{SU=(await(await fetch('https://equran.id/api/v2/surat')).json()).data}catch(e){$('slist').innerHTML='<div class="msg">Gagal memuat. Buka sekali saat online.<br><button class="btn" onclick="listS()">Coba lagi</button></div>';return}
+ const q=($('q').value||'').toLowerCase();$('slist').innerHTML=SU.filter(s=>(s.namaLatin+s.arti+s.nomor).toLowerCase().includes(q)).map(s=>`<div class="item" onclick="nav('surah',${s.nomor})"><span class="num">${s.nomor}</span><div style="flex:1"><b>${s.namaLatin}</b><div class="mut">${s.arti} · ${s.jumlahAyat} ayat</div></div><span class="ar" style="font-size:22px;line-height:1.4">${s.nama}</span></div>`).join('')}
+async function loadSurah(n){try{const d=(await(await fetch('https://equran.id/api/v2/surat/'+n)).json()).data;AY=d.ayat;$('st').textContent=d.namaLatin;$('ayat').innerHTML=`<button class="btn" onclick="playA(0)">▶ Putar dari awal</button>`+d.ayat.map((a,i)=>`<div class="ay"><div class="ar">${a.teksArab} ﴿${a.nomorAyat}﴾</div><div class="lat">${a.teksLatin}</div><div class="mut" style="font-size:14px">${a.teksIndonesia}</div><button class="btn" onclick="playA(${i})">▶ ${a.nomorAyat}</button></div>`).join('')}catch(e){$('ayat').innerHTML='<div class="msg">Gagal memuat (belum tersimpan offline).</div>'}}
+function playA(i){const a=AY[i],u=a&&a.audio&&(a.audio['05']||Object.values(a.audio)[0]);if(!u)return;au.src=u;au.play();au.onended=()=>playA(i+1)}
+async function dl(){let ok=0;for(let n=1;n<=114;n++){try{await fetch('https://equran.id/api/v2/surat/'+n);ok++}catch(e){}$('dls').textContent=ok+' / 114 tersimpan'}}
+V.quran=(f=>()=>{setTimeout(listS,0);return f()})(V.quran);V.surah=(f=>n=>{au.pause();setTimeout(()=>loadSurah(n),0);return f(n)})(V.surah);
 if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
+init();
 </script></body></html>
