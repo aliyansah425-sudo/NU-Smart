@@ -1,0 +1,78 @@
+{
+ "ann": [
+  "Selamat datang di NU Smart – MWC NU Pasean",
+  "Admin dapat mengubah pengumuman ini di menu Akun"
+ ],
+ "rek": "Bank: (isi di menu Akun)\nNo. Rekening: -\na.n. MWC NU Pasean\nQRIS: tempel tautan gambar di kolom Gambar bila perlu",
+ "about": "NU Smart adalah aplikasi digital MWC NU Pasean, Pamekasan.",
+ "cols": {
+  "berita": [
+   {
+    "id": "b1",
+    "t": "Selamat datang di NU Smart",
+    "c": "Pengumuman",
+    "d": "2026-11-21",
+    "i": "",
+    "b": "Ini contoh berita. Admin bisa menambah, mengubah, dan menghapusnya dari menu Akun."
+   }
+  ],
+  "wirid": [
+   {
+    "id": "w1",
+    "t": "Contoh Wirid & Doa",
+    "c": "Wirid",
+    "d": "",
+    "i": "",
+    "b": "Admin dapat menempel teks Arab dan terjemahan di sini. Baris berhuruf Arab otomatis tampil dengan font Arab."
+   }
+  ],
+  "tahlil": [
+   {
+    "id": "t1",
+    "t": "Susunan Tahlil",
+    "c": "Tahlil",
+    "d": "",
+    "i": "",
+    "b": "Isi susunan tahlil yang dipakai di Pasean melalui menu Akun. Untuk Surat Yasin, gunakan menu Al-Qur'an."
+   }
+  ],
+  "maulid": [
+   {
+    "id": "m1",
+    "t": "Maulid Diba' / Barzanji",
+    "c": "Maulid",
+    "d": "",
+    "i": "",
+    "b": "Teks belum diisi. Admin dapat menambahkannya."
+   }
+  ],
+  "pengurus": [
+   {
+    "id": "p1",
+    "t": "Rais Syuriyah",
+    "c": "Syuriyah",
+    "d": "",
+    "i": "",
+    "b": "Nama: (isi)\nKontak: (isi)"
+   },
+   {
+    "id": "p2",
+    "t": "Ketua Tanfidziyah",
+    "c": "Tanfidziyah",
+    "d": "",
+    "i": "",
+    "b": "Nama: (isi)\nKontak: (isi)"
+   }
+  ],
+  "banner": [
+   {
+    "id": "n1",
+    "t": "Lailatul Ijtima' MWC NU Pasean",
+    "c": "",
+    "d": "",
+    "i": "",
+    "b": "Ubah banner ini dari menu Akun"
+   }
+  ]
+ }
+}
