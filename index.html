@@ -1,0 +1,96 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#064E3B"><link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>NU Smart</title>
+<style>
+:root{--g:#064E3B;--g2:#10B981;--gold:#D97706;--bg:#F3F6F4;--tx:#0f1f19;--card:#fff;--mut:#5b6b64}
+@media(prefers-color-scheme:dark){:root{--bg:#0c1511;--tx:#e8f1ed;--card:#14211b;--mut:#9bb0a6}}
+*{box-sizing:border-box;margin:0}body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--tx);padding-bottom:calc(70px + env(safe-area-inset-bottom))}
+header{background:linear-gradient(160deg,var(--g),#0a7a5a);color:#fff;text-align:center;padding:calc(18px + env(safe-area-inset-top)) 16px 26px;border-radius:0 0 28px 28px}
+header img{width:76px;height:76px;border-radius:50%;background:#fff;border:3px solid var(--gold)}
+h1{font-size:26px;margin-top:6px}h1 b{color:#fbbf24}.sm{font-size:12px;letter-spacing:.2em;opacity:.85}
+.next{display:inline-block;margin-top:12px;background:rgba(255,255,255,.14);border-radius:20px;padding:8px 16px}
+.next big{font-size:30px;font-weight:700;display:block}
+main{padding:14px;max-width:640px;margin:auto}.card{background:var(--card);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+h2{font-size:16px;border-left:4px solid var(--gold);padding-left:8px;margin-bottom:10px}
+.row{display:flex;justify-content:space-between;padding:8px 6px;border-radius:8px}.row.on{background:var(--g2);color:#fff;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:center;font-size:12px}
+.grid button{background:none;border:0;color:inherit;font:inherit}.grid i{display:grid;place-items:center;width:52px;height:52px;margin:0 auto 4px;border-radius:50%;background:#d1fae5;font-size:24px;font-style:normal}
+input{width:100%;padding:12px;border-radius:12px;border:1px solid #cbd5d0;background:var(--card);color:var(--tx);margin-bottom:10px;font-size:15px}
+.item{display:flex;gap:10px;align-items:center;padding:10px 4px;border-bottom:1px solid rgba(128,128,128,.2);cursor:pointer}
+.num{width:34px;height:34px;border-radius:50%;background:var(--g);color:#fff;display:grid;place-items:center;font-size:13px;flex:none}
+.ar{font-family:'Amiri','Scheherazade New',serif;direction:rtl;text-align:right;line-height:2.2;font-size:var(--fs,28px)}
+.ay{padding:12px 0;border-bottom:1px solid rgba(128,128,128,.2)}.lat{color:var(--g2);font-size:13px;margin-top:4px}.id{font-size:14px;color:var(--mut);margin-top:4px}
+.btn{background:var(--g);color:#fff;border:0;border-radius:10px;padding:9px 14px;font-size:14px;margin:2px}.btn.o{background:var(--gold)}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -2px 12px rgba(0,0,0,.1)}
+nav button{flex:1;border:0;background:none;color:var(--mut);padding:9px 0;font-size:11px}nav button.on{color:var(--g2);font-weight:700}nav i{display:block;font-size:20px;font-style:normal}
+.hide{display:none}.msg{color:var(--mut);text-align:center;padding:16px;font-size:14px}iframe{width:100%;height:70vh;border:0;border-radius:12px}
+a.n{display:block;color:inherit;text-decoration:none;padding:10px 0;border-bottom:1px solid rgba(128,128,128,.2)}
+</style></head><body>
+<header><img src="icons/icon-192.png" alt="NU Smart"><h1>NU <b>Smart</b></h1><div class="sm">MWC NU PASEAN</div><div class="sm" style="letter-spacing:0">Pasean, Pamekasan</div>
+<div class="next"><small id="nn">Sholat berikutnya</small><big id="nt">--:--</big><small id="cd"></small></div><div style="font-size:13px;margin-top:8px" id="dt"></div></header>
+<main>
+<section id="p-home"><div class="card"><div class="grid">
+<button onclick="go('quran')"><i>📖</i>Al-Qur'an</button><button onclick="go('amal')"><i>🤲</i>Amaliyah</button><button onclick="go('berita')"><i>📰</i>Berita</button><button onclick="go('akun')"><i>⚙️</i>Pengaturan</button></div></div>
+<div class="card"><h2>Jadwal Sholat</h2><div id="sched"></div><div class="msg">Dihitung di HP (tanpa internet), perkiraan Pasean. Cocokkan dengan jadwal resmi setempat.</div></div></section>
+<section id="p-quran" class="hide"><input id="q" placeholder="Cari surah…" oninput="listS()"><div id="slist" class="card"></div>
+<div id="sread" class="hide"><button class="btn" onclick="closeS()">← Daftar</button><button class="btn o" onclick="fs(2)">A+</button><button class="btn o" onclick="fs(-2)">A−</button><button class="btn" id="pa" onclick="playAll()">▶ Murottal</button>
+<h2 id="st" style="margin-top:10px;border:0"></h2><div id="ayat" class="card"></div></div></section>
+<section id="p-amal" class="hide"><div class="card"><h2>Bacaan Cepat</h2>
+<div class="item" onclick="openS(36)"><span class="num">36</span>Surat Yasin</div><div class="item" onclick="openS(67)"><span class="num">67</span>Surat Al-Mulk</div><div class="item" onclick="openS(56)"><span class="num">56</span>Surat Al-Waqi'ah</div><div class="item" onclick="openS(18)"><span class="num">18</span>Surat Al-Kahfi</div></div>
+<div class="card"><h2>Ratibul Haddad</h2><div id="rat"><button class="btn" onclick="rat()">Buka flipbook (butuh internet)</button></div></div></section>
+<section id="p-berita" class="hide"><div class="card" id="news"><div class="msg">Memuat…</div></div></section>
+<section id="p-akun" class="hide"><div class="card"><h2>Tentang</h2><p style="font-size:14px">NU Smart – aplikasi MWC NU Pasean. Bisa dipasang ke layar utama dan dipakai offline.</p></div>
+<div class="card"><h2>Unduh untuk offline</h2><p style="font-size:14px;margin-bottom:8px">Simpan seluruh Al-Qur'an (teks, tanpa audio) agar terbaca tanpa internet.</p><button class="btn" onclick="dl()">Unduh 114 surah</button><div class="msg" id="dls"></div></div></section>
+</main>
+<nav><button class="on" data-t="home" onclick="go('home')"><i>🏠</i>Beranda</button><button data-t="quran" onclick="go('quran')"><i>📖</i>Al-Qur'an</button><button data-t="amal" onclick="go('amal')"><i>🤲</i>Amaliyah</button><button data-t="berita" onclick="go('berita')"><i>📰</i>Berita</button><button data-t="akun" onclick="go('akun')"><i>⚙️</i>Akun</button></nav>
+<script>
+// ===== PENGATURAN (ubah di sini) =====
+const BLOG='';            // contoh: 'https://namablog.blogspot.com' (kosongkan bila belum ada)
+const LAT=-7.05,LNG=113.6,TZ=7,RATIB='https://online.anyflip.com/udswu/snhj/mobile/index.html';
+// =====================================
+const $=i=>document.getElementById(i),R=Math.PI/180,pad=n=>String(n).padStart(2,'0');
+const hm=h=>{h=(h%24+24)%24;let m=Math.round(h*60);return pad(Math.floor(m/60)%24)+':'+pad(m%60)};
+function times(d){const jd=Date.UTC(d.getFullYear(),d.getMonth(),d.getDate(),12)/864e5+2440587.5-2451545;
+ const g=(357.529+.98560028*jd)%360,q=(280.459+.98564736*jd)%360,L=q+1.915*Math.sin(g*R)+.02*Math.sin(2*g*R),e=23.439-4e-7*jd;
+ let ra=Math.atan2(Math.cos(e*R)*Math.sin(L*R),Math.cos(L*R))/R/15;ra=(ra%24+24)%24;const dc=Math.asin(Math.sin(e*R)*Math.sin(L*R))/R,eq=q/15-ra;
+ const mid=12+TZ-LNG/15-((eq+12)%24-12);
+ const T=a=>{const c=(-Math.sin(a*R)-Math.sin(dc*R)*Math.sin(LAT*R))/(Math.cos(dc*R)*Math.cos(LAT*R));return Math.acos(Math.max(-1,Math.min(1,c)))/R/15};
+ const asr=-Math.atan(1/(1+Math.tan(Math.abs(LAT-dc)*R)))/R-90+90; // sudut matahari saat Asr
+ const aa=Math.atan(1/(1+Math.tan(Math.abs(LAT-dc)*R)))/R,ih=2/60;
+ const fajr=mid-T(20)+ih,sr=mid-T(.833),ss=mid+T(.833)+ih;
+ return[['Imsak',fajr-10/60],['Subuh',fajr],['Terbit',sr],['Dzuhur',mid+ih+2/60],['Ashar',mid+T(-aa)+ih],['Maghrib',ss],['Isya',mid+T(-18)+ih]]}
+let TS=[];
+function tick(){const n=new Date(),t=times(n),cur=n.getHours()+n.getMinutes()/60+n.getSeconds()/3600,pr=t.filter(x=>x[0]!=='Imsak'&&x[0]!=='Terbit');
+ let nx=pr.find(x=>x[1]>cur),tm=nx?nx[1]:times(new Date(n.getTime()+864e5))[1][1]+24;if(!nx)nx=['Subuh'];
+ const s=Math.max(0,Math.round((tm-cur)*3600));$('nn').textContent='Sholat berikutnya: '+nx[0];$('nt').textContent=hm(tm);
+ $('cd').textContent='− '+pad(Math.floor(s/3600))+':'+pad(Math.floor(s/60)%60)+':'+pad(s%60);
+ $('sched').innerHTML=t.map(x=>`<div class="row${x[0]===nx[0]?' on':''}"><span>${x[0]}</span><span>${hm(x[1])}</span></div>`).join('');
+ const f=(l,o)=>new Intl.DateTimeFormat(l,o).format(n);
+ $('dt').textContent=f('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' · '+f('id-u-ca-islamic-umalqura',{day:'numeric',month:'long',year:'numeric'})}
+setInterval(tick,1000);tick();
+function go(t){document.querySelectorAll('main>section').forEach(s=>s.classList.add('hide'));$('p-'+t).classList.remove('hide');
+ document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));scrollTo(0,0);if(t==='quran'&&!SU.length)loadS();if(t==='berita')loadN()}
+// ===== Al-Qur'an =====
+let SU=[],au=new Audio(),playing=null,AY=[];
+async function loadS(){$('slist').innerHTML='<div class="msg">Memuat daftar surah…</div>';
+ try{const r=await fetch('https://equran.id/api/v2/surat');SU=(await r.json()).data;listS()}catch(e){$('slist').innerHTML='<div class="msg">Gagal memuat. Buka sekali saat online, lalu bisa offline.<br><button class="btn" onclick="loadS()">Coba lagi</button></div>'}}
+function listS(){const q=$('q').value.toLowerCase();$('slist').innerHTML=SU.filter(s=>(s.namaLatin+s.arti+s.nomor).toLowerCase().includes(q)).map(s=>`<div class="item" onclick="openS(${s.nomor})"><span class="num">${s.nomor}</span><div style="flex:1"><b>${s.namaLatin}</b><div class="id">${s.arti} · ${s.jumlahAyat} ayat</div></div><span class="ar" style="font-size:22px;line-height:1.4">${s.nama}</span></div>`).join('')||'<div class="msg">Tidak ditemukan</div>'}
+async function openS(n){go('quran');$('slist').classList.add('hide');$('q').classList.add('hide');$('sread').classList.remove('hide');$('ayat').innerHTML='<div class="msg">Memuat…</div>';au.pause();
+ try{const d=(await(await fetch('https://equran.id/api/v2/surat/'+n)).json()).data;AY=d.ayat;$('st').textContent=d.namaLatin+' – '+d.arti;
+ $('ayat').innerHTML=d.ayat.map((a,i)=>`<div class="ay"><div class="ar">${a.teksArab} ﴿${a.nomorAyat}﴾</div><div class="lat">${a.teksLatin}</div><div class="id">${a.teksIndonesia}</div><button class="btn" onclick="playA(${i})">▶ Ayat ${a.nomorAyat}</button></div>`).join('')}
+ catch(e){$('ayat').innerHTML='<div class="msg">Gagal memuat surah ini (belum tersimpan offline).</div>'}}
+function closeS(){au.pause();$('sread').classList.add('hide');$('slist').classList.remove('hide');$('q').classList.remove('hide')}
+function fs(d){const c=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--fs'))||28;document.documentElement.style.setProperty('--fs',Math.min(52,Math.max(18,c+d))+'px')}
+function playA(i){const u=AY[i].audio&&(AY[i].audio['05']||Object.values(AY[i].audio)[0]);if(!u)return;au.src=u;au.play();au.onended=()=>{if(playing!==null&&AY[i+1])playA(i+1)}}
+function playAll(){playing=1;playA(0)}au.onpause=()=>{};
+async function dl(){let ok=0;for(let n=1;n<=114;n++){try{await fetch('https://equran.id/api/v2/surat/'+n);ok++}catch(e){}$('dls').textContent=ok+' / 114 tersimpan'}$('dls').textContent=ok===114?'Selesai. Al-Qur\'an kini bisa dibaca offline.':ok+' / 114 tersimpan. Coba lagi saat online.'}
+// ===== Berita (Blogger) =====
+async function loadN(){const el=$('news');if(!BLOG){el.innerHTML='<div class="msg">Isi alamat blog pada baris <code>const BLOG</code> di index.html.</div>';return}
+ let j;try{j=await(await fetch(BLOG+'/feeds/posts/default?alt=json&max-results=20')).json();localStorage.nuNews=JSON.stringify(j)}catch(e){j=JSON.parse(localStorage.nuNews||'null')}
+ if(!j){el.innerHTML='<div class="msg">Belum bisa memuat berita.</div>';return}
+ el.innerHTML=(j.feed.entry||[]).map(e=>{const l=(e.link.find(x=>x.rel==='alternate')||{}).href;return`<a class="n" href="${l}" target="_blank"><b>${e.title.$t}</b><div class="id">${new Date(e.published.$t).toLocaleDateString('id-ID')}</div></a>`}).join('')}
+function rat(){$('rat').innerHTML=`<iframe src="${RATIB}" allowfullscreen></iframe><a class="btn o" style="display:inline-block;text-decoration:none" href="${RATIB}" target="_blank">Layar penuh</a>`}
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
+</script></body></html>
